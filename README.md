@@ -8,38 +8,48 @@ This ROS-system based project tracks nose tip using MediaPipe and then plots it'
 - Python 3
 - MediaPipe (`mediapipe`)
 
-## How to Run the System
+## System Overview
+- `nose_detection_node.py` - Captures frames from a webcam (default is `/dev/video0`), tracks the nose tip using MediaPipe and publishes it's pixel-space coordinates to a ROS topic
+- `nose_plotter_node.py` - Subscribes to said topic and plots it onto Matlibplot plot
 
-###  Install Required Dependencies
+## How to Run
+
+1. **Install Required Dependencies**
 - Make sure ROS Noetic is installed and your catkin workspace is properly configured
 - Install the required Python dependencies:
     ```bash
     pip install opencv-python mediapipe matplotlib
     ```
 
-### Steps to Run
-
-1. **Build the Workspace**  
+2. **Build the Workspace**  
     Navigate to your catkin workspace and build the packages:
     ```bash
     cd ~/catkin_ws
     catkin_make
     source devel/setup.bash
     ```
-
-2. **Run the Face Detection Node**  
-    Open a terminal and execute:
+3. **Run nodes**
+- Separately
     ```bash
     rosrun nose_tracking face_detection_node.py
-    ```
-
-3. **Run the Plotting Node**  
-    Open another terminal and execute:
-    ```bash
     rosrun nose_tracking nose_plotter_node.py
     ```
+- Or run everything with roslaunch
+    ```bash
+    roslaunch nose_tracking nose_tracking.launch
+    ```
+    You can also specify parameters using the launch file:
+    - specify a different camera device (e.g. `/dev/video1`)
+         ```bash
+        roslaunch nose_tracking nose_tracking.launch video_device:=/dev/video1
+         ```
+    - specify how many points are shown on a plot (`0` for showing all received points)
+        ```bash
+        roslaunch nose_tracking nose_tracking.launch how_many_plot:=0
+        ```
+## Additional Notes
+- Designed for tracking only a single nose at a time 
+- Matlibplot plot may lag behind at higher rates
 
-4. **System Workflow**  
-    - The `face_detection_node.py` will start publishing nose tip coordinates to a `\face_coordinates` ROS topic .
-    - The `nose_plotter_node.py` will subscribe to this topic and show the nose trajectory in a live updating matplotlib plot.
+
 
