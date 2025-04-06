@@ -1,0 +1,6 @@
+<launch>
+   
+    <node pkg="nose_tracking" type="nose_tracker_node.py" name="nose_tracker" output="screen"/>
+
+    <node pkg="nose_tracking" type="nose_plotter_node.py" name="nose_plotter" output="screen"/>
+</launch>
