@@ -1,6 +1,10 @@
 <launch>
-   
-    <node pkg="nose_tracking" type="nose_tracker_node.py" name="nose_tracker" output="screen"/>
+    <arg name="video_device" default="/dev/video0" />
+    <arg name="how_many_plot" default="10"/>
+    <node name="nose_tracker_node" pkg="nose_tracking" type="nose_tracker_node.py" output="screen" />
+        <param name="video_device_name" type="string" value="$(arg video_device)" />
+        
+    <node name="nose_plotter_node" pkg="nose_tracking" type="nose_plotter_node.py" output="screen" />
+        <param name="how_many_plot" type="int" value="$(arg how_many_plot)" />
 
-    <node pkg="nose_tracking" type="nose_plotter_node.py" name="nose_plotter" output="screen"/>
 </launch>

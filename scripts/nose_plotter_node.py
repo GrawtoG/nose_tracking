@@ -8,7 +8,7 @@ from matplotlib.animation import FuncAnimation
 #Nose tip position initialization
 xData = []
 yData = []
-
+how_many_points = rospy.get_param("how_many_plot", 10)
 # Initialize the plot
 fig, ax = plt.subplots()
 line_path, = ax.plot([], [], 'go-', label="Nose path")
@@ -26,12 +26,17 @@ ax.grid(True)
 ax.legend()
 
 # Callback function to update the plot with new nose tip coordinates
-def callback(msg):
+def callbackLimitPoints(msg):
     xData.append(msg.x)
     yData.append(msg.y)
-    if len(xData) > 10: #Limit the number of points to 10
+    if len(xData) > how_many_points: #Limit the number of points #type: ignore
         xData.pop(0)
         yData.pop(0)
+
+def callbackNoLimitPoints(msg):
+    xData.append(msg.x)
+    yData.append(msg.y)
+
 
 # Animation function to update the plot
 def animate(i):
@@ -44,7 +49,10 @@ def animate(i):
 
 def main():
     rospy.init_node("nose_plotter", anonymous=True)
-    rospy.Subscriber("nose_coordinates", Point, callback)
+    if how_many_points > 0: #type: ignore
+        rospy.Subscriber("nose_coordinates", Point, callbackLimitPoints)
+    else:
+        rospy.Subscriber("nose_coordinates", Point, callbackNoLimitPoints)
 
     rospy.loginfo("Nose plotter node started")
     ani = FuncAnimation(fig, animate, interval=100)

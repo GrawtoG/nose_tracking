@@ -19,7 +19,9 @@ def main():
 
 
     # Initialize the camera
-    cap = cv2.VideoCapture(0)
+    device = rospy.get_param("video_device_name", "/dev/video0")
+    cap = cv2.VideoCapture(device) # type: ignore
+    
     if not cap.isOpened():
         rospy.logerr("Failed to open camera check if correct camera was chosen")
         return

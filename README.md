@@ -43,7 +43,7 @@ This ROS-system based project tracks nose tip using MediaPipe and then plots it'
          ```bash
         roslaunch nose_tracking nose_tracking.launch video_device:=/dev/video1
          ```
-    - specify how many points are shown on a plot (`0` for showing all received points)
+    - specifu how many points are shown on a plot (0 for showing all received points)
         ```bash
         roslaunch nose_tracking nose_tracking.launch how_many_plot:=0
         ```
